@@ -1,6 +1,6 @@
 {
-  "name": "shopify-express-x",
-  "version": "0.1.0",
+  "name": "@topmonks/shopify-express-x",
+  "version": "1.0.0",
   "author": "Minh Phan",
   "description": "Alternative for @shopify/express - Get up and running quickly with Express.js and the Shopify API.",
   "keywords": [
@@ -8,11 +8,11 @@
     "express.js",
     "express middleware"
   ],
-  "bugs": "https://github.com/paul-phan/shopify-express-x/issues",
+  "bugs": "https://github.com/topmonks/shopify-express-x/issues",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/paul-phan/shopify-express-x.git"
+    "url": "https://github.com/topmonks/shopify-express-x.git"
   },
   "main": "./index.js",
   "engines": {
