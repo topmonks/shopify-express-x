@@ -570,7 +570,7 @@ function topLevelRedirect(response, shopName, url) {
           } else {
             message = JSON.stringify({
               message: "Shopify.API.remoteRedirect",
-              data: { location: window.location.origin + "${url}" }
+              data: { location: "${url}" }
             });
             window.parent.postMessage(message, "https://${shopName}");
           }
