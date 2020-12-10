@@ -26,7 +26,7 @@ module.exports = function createShopifyAuthRoutes({
       if (request.cookies && !request.cookies[TEST_COOKIE_NAME]) {
         // This is to avoid a redirect loop if the app doesn't use verifyRequest or set the test cookie elsewhere.
         response.cookie(TEST_COOKIE_NAME, '1');
-        topLevelRedirect(response, `${host}${baseUrl}/enable_cookies?${querystring.stringify({shop})}`);
+        topLevelRedirect(response, shop,`${host}${baseUrl}/enable_cookies?${querystring.stringify({shop})}`);
         return;
       }
 
@@ -45,7 +45,7 @@ module.exports = function createShopifyAuthRoutes({
 
       if (request.cookies && !request.cookies[TOP_LEVEL_OAUTH_COOKIE_NAME]) {
         response.cookie(TOP_LEVEL_OAUTH_COOKIE_NAME, '1');
-        topLevelRedirect(response, `${redirectTo}?${querystring.stringify(redirectParams)}`);
+        topLevelRedirect(response, shop,`${redirectTo}?${querystring.stringify(redirectParams)}`);
         return;
       }
 
@@ -556,14 +556,25 @@ information. They expire after 30 days.`
   };
 };
 
-function topLevelRedirect(response, url) {
+function topLevelRedirect(response, shopName, url) {
   response.send(
     `<!DOCTYPE html>
     <html>
       <head>
-        <script type="text/javascript">
-          window.top.location.href = "${url}"
-        </script>
+          <script type='text/javascript'>
+          // If the current window is the 'parent', change the URL by setting location.href
+          if (window.top == window.self) {
+            window.top.location.href = "${url}";
+          
+          // If the current window is the 'child', change the parent's URL with postMessage
+          } else {
+            message = JSON.stringify({
+              message: "Shopify.API.remoteRedirect",
+              data: { location: window.location.origin + "${url}" }
+            });
+            window.parent.postMessage(message, "https://${shopName}");
+          }
+          </script>
       </head>
     </html>`,
   );
